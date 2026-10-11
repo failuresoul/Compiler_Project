@@ -1,7 +1,7 @@
 # SylhetScript Lexical Analyzer Report
 
 **Course:** Compiler Design Laboratory  
-**Project:** Simple Lexical Analyzer using Flex  
+**Project:** Custom Lexical Analyzer using Flex  
 **Language Name:** **SylhetScript** (`.syl`)  
 
 ---
@@ -9,95 +9,44 @@
 ## 1. Title and Objective
 
 ### 1.1 Title
-**Design and Implementation of a Simple Lexical Analyzer for SylhetScript**
+**Design and Implementation of a Pure Sylheti Lexical Analyzer with Multi-Space Tolerance**
 
 ### 1.2 Objective
-The objective of this laboratory task is to construct a minimal and clean lexical analyzer using **Flex (C)** following standard laboratory conventions. 
+The objective of this project is to build an intuitive, clean lexical analyzer using **Flex (C)** for **SylhetScript**.
 
-SylhetScript uses regional Sylheti words for keywords, punctuation, and operators:
-- **Include Directive:** `haraiarania` (include)
-- **Input / Output:** `foroba` (input), `lekoreba` (output)
+The language uses authentic Sylheti phrases for all keywords, punctuation, and operators. Furthermore, the lexer handles multi-word keywords (e.g., `cokkor maro`, `jura lagau`, `soman ba tura boro`) with **multi-space tolerance**, allowing single or multiple spaces/tabs between words without breaking tokenization:
+- **Include Directive:** `haraiarania`
+- **Input / Output:** `foroba` (read input), `lekoreba` (print output)
 - **Data Types:** `nombor` (int), `gutaalanombor` (float), `mat` (string)
 - **Control Flow:** `judi` (if), `naile` (else), `shuru` (start), `shesh` (end), `firot` (return)
 - **Booleans:** `hasa` (true), `misa` (false)
 - **Loops:** `jotobil` (while), `cokkor maro` (for), `domlou` (break), `au jai` (continue)
 - **Data Structures:** `katar` (array), `dhach` (struct), `sreni` (class)
 - **Native Punctuation:** `hesh` (semicolon), `bekasuru` (`{`), `bekahesh` (`}`), `gullasuru` (`(`), `gullahesh` (`)`), `sujasuru` (`[`), `sujahesh` (`]`), `halka ubau` (`,`), `pura domlou` (`.`)
-- **Descriptive Operators:** `jura lagau` (`+`), `kati lau` (`-`), `furon koro` (`*`), `bangi lau` (`/`), `baki kotokan` (`%`), `barau` (`++`), `komau` (`--`), `shoman` (`==`), `besoman` (`!=`), `soman ba tura boro` (`>=`), `soman ba tura choto` (`<=`), `fura boro` (`>`), `fura chuto` (`<`), `harau` (`=`), `jura lagau doure` (`+=`), `kati lau doure` (`-=`), `duiogu oite oibo` (`&&`), `egu oilei oibo` (`||`), `ja koibay ulta` (`!`).
+- **Descriptive Operators:** `jura lagau`, `kati lau`, `furon koro`, `bangi lau`, `baki kotokan`, `barau`, `komau`, `shoman`, `besoman`, `soman ba tura boro`, `soman ba tura choto`, `fura boro`, `fura chuto`, `harau`, `jura lagau doure`, `kati lau doure`, `duiogu oite oibo`, `egu oilei oibo`, `ja koibay ulta`.
 
 ---
 
-## 2. Language Specification
+## 2. Multi-Space Tolerance Mechanism
 
-### 2.1 Keyword & Syntax Mapping
+In natural typing, programmers may occasionally type two spaces, three spaces, or a tab between words in multi-word keywords (e.g., `cokkor    maro`).
 
-| SylhetScript Word | Traditional Meaning | Action Output |
-| :--- | :--- | :--- |
-| `haraiarania` / `#include` | Include library | `include` |
-| `foroba` | Input | `input keyword` |
-| `lekoreba` | Output | `output keyword` |
-| `shuru` | Start block | `start keyword` |
-| `shesh` | End block | `end keyword` |
-| `nombor` | Integer type | `integer type` |
-| `gutaalanombor` | Float type | `float type` |
-| `mat` | String type | `string type` |
-| `judi` | If condition | `if keyword` |
-| `naile` | Else condition | `else keyword` |
-| `kam` | Function | `function keyword` |
-| `firot` | Return | `return keyword` |
-| `hasa` | True | `boolean true` |
-| `misa` | False | `boolean false` |
-| `jotobil` | While loop | `while loop` |
-| `cokkor maro` | For loop | `for loop` |
-| `domlou` | Break | `break` |
-| `au jai` | Continue | `continue` |
-| `katar` | Array | `array keyword` |
-| `dhach` / `struct` | Struct | `struct` |
-| `sreni` / `class` | Class | `class` |
-
-### 2.2 Punctuation Mapping
-
-| SylhetScript Word | Symbol | Action Output |
-| :--- | :--- | :--- |
-| `hesh` | `;` | `semicolon` |
-| `bekasuru` | `{` | `curly open` |
-| `bekahesh` | `}` | `curly close` |
-| `gullasuru` | `(` | `parenthesis open` |
-| `gullahesh` | `)` | `parenthesis close` |
-| `sujasuru` | `[` | `bracket open` |
-| `sujahesh` | `]` | `bracket close` |
-| `halka ubau` | `,` | `comma` |
-| `pura domlou` | `.` | `dot` |
-
-### 2.3 Operators Mapping
-
-| SylhetScript Word | Symbol | Action Output |
-| :--- | :--- | :--- |
-| `jura lagau` | `+` | `operator addition` |
-| `kati lau` | `-` | `operator subtraction` |
-| `furon koro` | `*` | `operator multiplication` |
-| `bangi lau` | `/` | `operator division` |
-| `baki kotokan` | `%` | `operator modulus` |
-| `barau` | `++` | `operator increment` |
-| `komau` | `--` | `operator decrement` |
-| `harau` / `rakho` | `=` | `operator assign` |
-| `shoman` | `==` | `operator equal` |
-| `besoman` | `!=` | `operator not equal` |
-| `soman ba tura boro` | `>=` | `operator greater equal` |
-| `soman ba tura choto` | `<=` | `operator less equal` |
-| `fura boro` | `>` | `operator greater` |
-| `fura chuto` | `<` | `operator less` |
-| `jura lagau doure` | `+=` | `operator add assign` |
-| `kati lau doure` | `-=` | `operator sub assign` |
-| `duiogu oite oibo` | `&&` | `operator and` |
-| `egu oilei oibo` | `\|\|` | `operator or` |
-| `ja koibay ulta` | `!` | `operator not` |
+To handle this cleanly in Flex:
+1. Define a space macro:
+   ```c
+   SP   [ \t]+
+   ```
+2. Write rules connecting the words with `{SP}`:
+   ```c
+   "cokkor"{SP}"maro"                   { printf("for loop\n"); }
+   "jura_lagau"|"jura"{SP}"lagau"       { printf("operator addition\n"); }
+   "soman"{SP}"ba"{SP}"tura"{SP}"boro"  { printf("operator greater equal\n"); }
+   ```
+This matches 1 space, multiple spaces, or tabs between words.
 
 ---
 
 ## 3. Implementation of `lexer.l`
-
-The full Flex source code is clean, direct, and beginner-friendly:
 
 ```c
 %{
@@ -106,90 +55,93 @@ The full Flex source code is clean, direct, and beginner-friendly:
 
 %option nounput noinput
 
+/* SP handles one or more spaces or tabs between words */
+SP   [ \t]+
+
 %%
 
  /* 1. Include Directive */
-"haraiarania"|"#include"             { printf("include\n"); }
+"haraiarania"                                  { printf("include\n"); }
 
  /* 2. Input and Output */
-"foroba"                             { printf("input keyword\n"); }
-"lekoreba"                           { printf("output keyword\n"); }
+"foroba"                                       { printf("input keyword\n"); }
+"lekoreba"                                     { printf("output keyword\n"); }
 
  /* 3. Core Keywords */
-"shuru"                              { printf("start keyword\n"); }
-"shesh"                              { printf("end keyword\n"); }
-"nombor"                             { printf("integer type\n"); }
-"gutaalanombor"                      { printf("float type\n"); }
-"mat"                                { printf("string type\n"); }
-"judi"                               { printf("if keyword\n"); }
-"naile"                              { printf("else keyword\n"); }
-"kam"                                { printf("function keyword\n"); }
-"firot"                              { printf("return keyword\n"); }
-"hasa"                               { printf("boolean true\n"); }
-"misa"                               { printf("boolean false\n"); }
+"shuru"                                        { printf("start keyword\n"); }
+"shesh"                                        { printf("end keyword\n"); }
+"nombor"                                       { printf("integer type\n"); }
+"gutaalanombor"                                { printf("float type\n"); }
+"mat"                                          { printf("string type\n"); }
+"judi"                                         { printf("if keyword\n"); }
+"naile"                                        { printf("else keyword\n"); }
+"kam"                                          { printf("function keyword\n"); }
+"firot"                                        { printf("return keyword\n"); }
+"hasa"                                         { printf("boolean true\n"); }
+"misa"                                         { printf("boolean false\n"); }
 
  /* 4. Loops */
-"jotobil"                            { printf("while loop\n"); }
-"cokkor maro"                        { printf("for loop\n"); }
-"domlou"                             { printf("break\n"); }
-"au jai"                             { printf("continue\n"); }
+"jotobil"                                      { printf("while loop\n"); }
+"cokkor"{SP}"maro"                             { printf("for loop\n"); }
+"domlou"                                       { printf("break\n"); }
+"au"{SP}"jai"                                  { printf("continue\n"); }
 
  /* 5. Array, Struct, Class */
-"katar"                              { printf("array keyword\n"); }
-"dhach"|"struct"                     { printf("struct\n"); }
-"sreni"|"class"                      { printf("class\n"); }
+"katar"                                        { printf("array keyword\n"); }
+"dhach"                                        { printf("struct\n"); }
+"sreni"                                        { printf("class\n"); }
 
- /* 6. Native Punctuation */
-"hesh"|";"                           { printf("semicolon\n"); }
-"bekasuru"|"{"                       { printf("curly open\n"); }
-"bekahesh"|"}"                       { printf("curly close\n"); }
-"gullasuru"|"("                      { printf("parenthesis open\n"); }
-"gullahesh"|")"                      { printf("parenthesis close\n"); }
-"sujasuru"|"["                       { printf("bracket open\n"); }
-"sujahesh"|"]"                       { printf("bracket close\n"); }
-"halka ubau"|","                     { printf("comma\n"); }
-"pura domlou"|"."                    { printf("dot\n"); }
+ /* 6. Native Sylheti Punctuation */
+"hesh"                                         { printf("semicolon\n"); }
+"bekasuru"                                     { printf("curly open\n"); }
+"bekahesh"                                     { printf("curly close\n"); }
+"gullasuru"                                    { printf("parenthesis open\n"); }
+"gullahesh"                                    { printf("parenthesis close\n"); }
+"sujasuru"                                     { printf("bracket open\n"); }
+"sujahesh"                                     { printf("bracket close\n"); }
+"halka"{SP}"ubau"                              { printf("comma\n"); }
+"pura"{SP}"domlou"                             { printf("dot\n"); }
 
  /* 7. Descriptive Operators */
-"jura_lagau"|"jura lagau"|"+"        { printf("operator addition\n"); }
-"kati lau"|"-"                       { printf("operator subtraction\n"); }
-"furon koro"|"*"                     { printf("operator multiplication\n"); }
-"bangi lau"|"/"                      { printf("operator division\n"); }
-"baki kotokan"|"%"                   { printf("operator modulus\n"); }
+"jura_lagau"|"jura"{SP}"lagau"                 { printf("operator addition\n"); }
+"kati"{SP}"lau"                                { printf("operator subtraction\n"); }
+"furon"{SP}"koro"                              { printf("operator multiplication\n"); }
+"bangi"{SP}"lau"                               { printf("operator division\n"); }
+"baki"{SP}"kotokan"                            { printf("operator modulus\n"); }
 
-"barau"|"++"                         { printf("operator increment\n"); }
-"komau"|"--"                         { printf("operator decrement\n"); }
+"barau"                                        { printf("operator increment\n"); }
+"komau"                                        { printf("operator decrement\n"); }
 
-"shoman"|"=="                        { printf("operator equal\n"); }
-"besoman"|"!="                       { printf("operator not equal\n"); }
-"soman ba tura boro"|">="           { printf("operator greater equal\n"); }
-"soman ba tura choto"|"<="          { printf("operator less equal\n"); }
-"fura boro"|">"                      { printf("operator greater\n"); }
-"fura chuto"|"<"                     { printf("operator less\n"); }
+"shoman"                                       { printf("operator equal\n"); }
+"besoman"                                      { printf("operator not equal\n"); }
+"soman"{SP}"ba"{SP}"tura"{SP}"boro"            { printf("operator greater equal\n"); }
+"soman"{SP}"ba"{SP}"tura"{SP}"choto"           { printf("operator less equal\n"); }
+"fura"{SP}"boro"                               { printf("operator greater\n"); }
+"fura"{SP}"chuto"                              { printf("operator less\n"); }
 
-"harau"|"rakho"|"="                  { printf("operator assign\n"); }
-"jura lagau doure"|"+="              { printf("operator add assign\n"); }
-"kati lau doure"|"-="               { printf("operator sub assign\n"); }
+"harau"|"rakho"                                { printf("operator assign\n"); }
+"jura"{SP}"lagau"{SP}"doure"                   { printf("operator add assign\n"); }
+"kati"{SP}"lau"{SP}"doure"                     { printf("operator sub assign\n"); }
 
-"duiogu oite oibo"|"&&"              { printf("operator and\n"); }
-"egu oilei oibo"|"||"                { printf("operator or\n"); }
-"ja koibay ulta"|"!"                 { printf("operator not\n"); }
+"duiogu"{SP}"oite"{SP}"oibo"                   { printf("operator and\n"); }
+"egu"{SP}"oilei"{SP}"oibo"                     { printf("operator or\n"); }
+"ja"{SP}"koibay"{SP}"ulta"                     { printf("operator not\n"); }
 
  /* Literals */
-[0-9]+[.][0-9]+                      { printf("float literal: %s\n", yytext); }
-[0-9]+                               { printf("integer literal: %s\n", yytext); }
-\"[^\n\"]*\"                         { printf("string literal: %s\n", yytext); }
+[0-9]+[.][0-9]+                                { printf("float literal: %s\n", yytext); }
+[0-9]+                                         { printf("integer literal: %s\n", yytext); }
+\"([^\"\\\n]|\\.)*\"                           { printf("string literal: %s\n", yytext); }
 
  /* Identifiers */
-[a-zA-Z_][a-zA-Z0-9_]*               { printf("identifier: %s\n", yytext); }
+[a-zA-Z_][a-zA-Z0-9_]*                         { printf("identifier: %s\n", yytext); }
 
  /* Comments */
-"//".*                               { printf("single comment\n"); }
-"/*"([^*]|\*+[^*/])*"*/"             { printf("multi comment\n"); }
+"//".*                                         { printf("single comment\n"); }
+"/*"([^*]|\*+[^*/])*"*/"                       { printf("multi comment\n"); }
 
  /* Whitespace and ignore */
-[ \t\r\n]+                           ;
-.                                    ;
+[ \t\r\n]+                                     ;
+.                                              { printf("unrecognized symbol: %s\n", yytext); }
 
 %%
 
@@ -212,6 +164,11 @@ int main(int argc, char **argv)
     }
 
     yylex();
+
+    if (yyin) {
+        fclose(yyin);
+    }
+
     return 0;
 }
 ```
@@ -326,21 +283,21 @@ shesh
 
 ---
 
-## 5. Compilation and Run
+## 5. Actual Output
 
-### 5.1 Build
+### 5.1 Compilation Command
 ```bash
 flex lexer.l
 gcc -Wall lex.yy.c -o lexer
 ```
 Compiles with **zero errors and zero warnings**.
 
-### 5.2 Execution
+### 5.2 Execution Command
 ```bash
 ./lexer sample.syl
 ```
 
-### 5.3 Actual Output
+### 5.3 Actual Terminal Output
 ```text
 single comment
 single comment
@@ -646,7 +603,6 @@ end keyword
 
 ## 6. Conclusion
 
-The full code in `lexer.l` has been implemented in a clear, minimal style:
-- Direct, simple actions printing token categories.
-- Covers include directive, input/output, keywords, loops, array, struct, class, native punctuation, and descriptive operators.
+- Added `{SP}` macro `[ \t]+` ensuring complete multi-space and tab tolerance for multi-word phrases.
+- Properly closed `yyin` with `fclose(yyin)`.
 - Compiles with zero warnings and runs cleanly.

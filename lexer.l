@@ -4,90 +4,93 @@
 
 %option nounput noinput
 
+/* SP handles one or more spaces or tabs between words */
+SP   [ \t]+
+
 %%
 
  /* 1. Include Directive */
-"haraiarania"|"#include"             { printf("include\n"); }
+"haraiarania"                                  { printf("include\n"); }
 
  /* 2. Input and Output */
-"foroba"                             { printf("input keyword\n"); }
-"lekoreba"                           { printf("output keyword\n"); }
+"foroba"                                       { printf("input keyword\n"); }
+"lekoreba"                                     { printf("output keyword\n"); }
 
  /* 3. Core Keywords */
-"shuru"                              { printf("start keyword\n"); }
-"shesh"                              { printf("end keyword\n"); }
-"nombor"                             { printf("integer type\n"); }
-"gutaalanombor"                      { printf("float type\n"); }
-"mat"                                { printf("string type\n"); }
-"judi"                               { printf("if keyword\n"); }
-"naile"                              { printf("else keyword\n"); }
-"kam"                                { printf("function keyword\n"); }
-"firot"                              { printf("return keyword\n"); }
-"hasa"                               { printf("boolean true\n"); }
-"misa"                               { printf("boolean false\n"); }
+"shuru"                                        { printf("start keyword\n"); }
+"shesh"                                        { printf("end keyword\n"); }
+"nombor"                                       { printf("integer type\n"); }
+"gutaalanombor"                                { printf("float type\n"); }
+"mat"                                          { printf("string type\n"); }
+"judi"                                         { printf("if keyword\n"); }
+"naile"                                        { printf("else keyword\n"); }
+"kam"                                          { printf("function keyword\n"); }
+"firot"                                        { printf("return keyword\n"); }
+"hasa"                                         { printf("boolean true\n"); }
+"misa"                                         { printf("boolean false\n"); }
 
  /* 4. Loops */
-"jotobil"                            { printf("while loop\n"); }
-"cokkor maro"                        { printf("for loop\n"); }
-"domlou"                             { printf("break\n"); }
-"au jai"                             { printf("continue\n"); }
+"jotobil"                                      { printf("while loop\n"); }
+"cokkor"{SP}"maro"                             { printf("for loop\n"); }
+"domlou"                                       { printf("break\n"); }
+"au"{SP}"jai"                                  { printf("continue\n"); }
 
  /* 5. Array, Struct, Class */
-"katar"                              { printf("array keyword\n"); }
-"dhach"|"struct"                     { printf("struct\n"); }
-"sreni"|"class"                      { printf("class\n"); }
+"katar"                                        { printf("array keyword\n"); }
+"dhach"                                        { printf("struct\n"); }
+"sreni"                                        { printf("class\n"); }
 
- /* 6. Native Punctuation */
-"hesh"|";"                           { printf("semicolon\n"); }
-"bekasuru"|"{"                       { printf("curly open\n"); }
-"bekahesh"|"}"                       { printf("curly close\n"); }
-"gullasuru"|"("                      { printf("parenthesis open\n"); }
-"gullahesh"|")"                      { printf("parenthesis close\n"); }
-"sujasuru"|"["                       { printf("bracket open\n"); }
-"sujahesh"|"]"                       { printf("bracket close\n"); }
-"halka ubau"|","                     { printf("comma\n"); }
-"pura domlou"|"."                    { printf("dot\n"); }
+ /* 6. Native Sylheti Punctuation */
+"hesh"                                         { printf("semicolon\n"); }
+"bekasuru"                                     { printf("curly open\n"); }
+"bekahesh"                                     { printf("curly close\n"); }
+"gullasuru"                                    { printf("parenthesis open\n"); }
+"gullahesh"                                    { printf("parenthesis close\n"); }
+"sujasuru"                                     { printf("bracket open\n"); }
+"sujahesh"                                     { printf("bracket close\n"); }
+"halka"{SP}"ubau"                              { printf("comma\n"); }
+"pura"{SP}"domlou"                             { printf("dot\n"); }
 
  /* 7. Descriptive Operators */
-"jura_lagau"|"jura lagau"|"+"        { printf("operator addition\n"); }
-"kati lau"|"-"                       { printf("operator subtraction\n"); }
-"furon koro"|"*"                     { printf("operator multiplication\n"); }
-"bangi lau"|"/"                      { printf("operator division\n"); }
-"baki kotokan"|"%"                   { printf("operator modulus\n"); }
+"jura_lagau"|"jura"{SP}"lagau"                 { printf("operator addition\n"); }
+"kati"{SP}"lau"                                { printf("operator subtraction\n"); }
+"furon"{SP}"koro"                              { printf("operator multiplication\n"); }
+"bangi"{SP}"lau"                               { printf("operator division\n"); }
+"baki"{SP}"kotokan"                            { printf("operator modulus\n"); }
 
-"barau"|"++"                         { printf("operator increment\n"); }
-"komau"|"--"                         { printf("operator decrement\n"); }
+"barau"                                        { printf("operator increment\n"); }
+"komau"                                        { printf("operator decrement\n"); }
 
-"shoman"|"=="                        { printf("operator equal\n"); }
-"besoman"|"!="                       { printf("operator not equal\n"); }
-"soman ba tura boro"|">="           { printf("operator greater equal\n"); }
-"soman ba tura choto"|"<="          { printf("operator less equal\n"); }
-"fura boro"|">"                      { printf("operator greater\n"); }
-"fura chuto"|"<"                     { printf("operator less\n"); }
+"shoman"                                       { printf("operator equal\n"); }
+"besoman"                                      { printf("operator not equal\n"); }
+"soman"{SP}"ba"{SP}"tura"{SP}"boro"            { printf("operator greater equal\n"); }
+"soman"{SP}"ba"{SP}"tura"{SP}"choto"           { printf("operator less equal\n"); }
+"fura"{SP}"boro"                               { printf("operator greater\n"); }
+"fura"{SP}"chuto"                              { printf("operator less\n"); }
 
-"harau"|"rakho"|"="                  { printf("operator assign\n"); }
-"jura lagau doure"|"+="              { printf("operator add assign\n"); }
-"kati lau doure"|"-="               { printf("operator sub assign\n"); }
+"harau"|"rakho"                                { printf("operator assign\n"); }
+"jura"{SP}"lagau"{SP}"doure"                   { printf("operator add assign\n"); }
+"kati"{SP}"lau"{SP}"doure"                     { printf("operator sub assign\n"); }
 
-"duiogu oite oibo"|"&&"              { printf("operator and\n"); }
-"egu oilei oibo"|"||"                { printf("operator or\n"); }
-"ja koibay ulta"|"!"                 { printf("operator not\n"); }
+"duiogu"{SP}"oite"{SP}"oibo"                   { printf("operator and\n"); }
+"egu"{SP}"oilei"{SP}"oibo"                     { printf("operator or\n"); }
+"ja"{SP}"koibay"{SP}"ulta"                     { printf("operator not\n"); }
 
  /* Literals */
-[0-9]+[.][0-9]+                      { printf("float literal: %s\n", yytext); }
-[0-9]+                               { printf("integer literal: %s\n", yytext); }
-\"[^\n\"]*\"                         { printf("string literal: %s\n", yytext); }
+[0-9]+[.][0-9]+                                { printf("float literal: %s\n", yytext); }
+[0-9]+                                         { printf("integer literal: %s\n", yytext); }
+\"([^\"\\\n]|\\.)*\"                           { printf("string literal: %s\n", yytext); }
 
  /* Identifiers */
-[a-zA-Z_][a-zA-Z0-9_]*               { printf("identifier: %s\n", yytext); }
+[a-zA-Z_][a-zA-Z0-9_]*                         { printf("identifier: %s\n", yytext); }
 
  /* Comments */
-"//".*                               { printf("single comment\n"); }
-"/*"([^*]|\*+[^*/])*"*/"             { printf("multi comment\n"); }
+"//".*                                         { printf("single comment\n"); }
+"/*"([^*]|\*+[^*/])*"*/"                       { printf("multi comment\n"); }
 
  /* Whitespace and ignore */
-[ \t\r\n]+                           ;
-.                                    ;
+[ \t\r\n]+                                     ;
+.                                              { printf("unrecognized symbol: %s\n", yytext); }
 
 %%
 
@@ -110,5 +113,10 @@ int main(int argc, char **argv)
     }
 
     yylex();
+
+    if (yyin) {
+        fclose(yyin);
+    }
+
     return 0;
 }
