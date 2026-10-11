@@ -81,12 +81,12 @@ SP   [ \t]+
 [0-9]+                                         { printf("integer literal: %s\n", yytext); }
 \"([^\"\\\n]|\\.)*\"                           { printf("string literal: %s\n", yytext); }
 
+ /* Comments */
+"bekar".*                                      { printf("single comment\n"); }
+"fura"(.|\n)*"bekama"                          { printf("multi comment\n"); }
+
  /* Identifiers */
 [a-zA-Z_][a-zA-Z0-9_]*                         { printf("identifier: %s\n", yytext); }
-
- /* Comments */
-"//".*                                         { printf("single comment\n"); }
-"/*"([^*]|\*+[^*/])*"*/"                       { printf("multi comment\n"); }
 
  /* Whitespace and ignore */
 [ \t\r\n]+                                     ;

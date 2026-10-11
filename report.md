@@ -9,12 +9,15 @@
 ## 1. Title and Objective
 
 ### 1.1 Title
-**Design and Implementation of a Pure Sylheti Lexical Analyzer with Multi-Space Tolerance**
+**Design and Implementation of a Pure Sylheti Lexical Analyzer with Custom Comments and Multi-Space Tolerance**
 
 ### 1.2 Objective
 The objective of this project is to build an intuitive, clean lexical analyzer using **Flex (C)** for **SylhetScript**.
 
-The language uses authentic Sylheti phrases for all keywords, punctuation, and operators. Furthermore, the lexer handles multi-word keywords (e.g., `cokkor maro`, `jura lagau`, `soman ba tura boro`) with **multi-space tolerance**, allowing single or multiple spaces/tabs between words without breaking tokenization:
+The language uses authentic Sylheti phrases for all keywords, comments, punctuation, and operators. Furthermore, the lexer handles multi-word keywords (e.g., `cokkor maro`, `jura lagau`, `soman ba tura boro`) with **multi-space tolerance**, allowing single or multiple spaces/tabs between words without breaking tokenization:
+- **Comments:**
+  - **Single-Line Comment (`//`):** `bekar <comment>`
+  - **Multi-Line Comment (`/* ... */`):** `fura <comment> bekama`
 - **Include Directive:** `haraiarania`
 - **Input / Output:** `foroba` (read input), `lekoreba` (print output)
 - **Data Types:** `nombor` (int), `gutaalanombor` (float), `mat` (string)
@@ -27,8 +30,9 @@ The language uses authentic Sylheti phrases for all keywords, punctuation, and o
 
 ---
 
-## 2. Multi-Space Tolerance Mechanism
+## 2. Multi-Space Tolerance & Custom Comment Mechanism
 
+### 2.1 Multi-Space Tolerance
 In natural typing, programmers may occasionally type two spaces, three spaces, or a tab between words in multi-word keywords (e.g., `cokkor    maro`).
 
 To handle this cleanly in Flex:
@@ -42,7 +46,17 @@ To handle this cleanly in Flex:
    "jura_lagau"|"jura"{SP}"lagau"       { printf("operator addition\n"); }
    "soman"{SP}"ba"{SP}"tura"{SP}"boro"  { printf("operator greater equal\n"); }
    ```
-This matches 1 space, multiple spaces, or tabs between words.
+
+### 2.2 Custom Sylheti Comments
+SylhetScript completely replaces C-style comments (`//` and `/* */`) using clean, direct one-line rules:
+1. **Single-line Comment (`bekar`):**
+   ```c
+   "bekar".*                            { printf("single comment\n"); }
+   ```
+2. **Multi-line Comment (`fura ... bekama`):**
+   ```c
+   "fura"(.|\n)*"bekama"                { printf("multi comment\n"); }
+   ```
 
 ---
 
@@ -132,12 +146,12 @@ SP   [ \t]+
 [0-9]+                                         { printf("integer literal: %s\n", yytext); }
 \"([^\"\\\n]|\\.)*\"                           { printf("string literal: %s\n", yytext); }
 
+ /* Comments */
+"bekar".*                                      { printf("single comment\n"); }
+"fura"(.|\n)*"bekama"                          { printf("multi comment\n"); }
+
  /* Identifiers */
 [a-zA-Z_][a-zA-Z0-9_]*                         { printf("identifier: %s\n", yytext); }
-
- /* Comments */
-"//".*                                         { printf("single comment\n"); }
-"/*"([^*]|\*+[^*/])*"*/"                       { printf("multi comment\n"); }
 
  /* Whitespace and ignore */
 [ \t\r\n]+                                     ;
@@ -177,22 +191,25 @@ int main(int argc, char **argv)
 
 ## 4. Demonstration Program (`sample.syl`)
 
-```c
-// ==========================================
-// SylhetScript Program: sample.syl
-// Pure Sylheti Syntax with Custom Vocabulary
-// ==========================================
+```syl
+fura
+==========================================
+SylhetScript Program: sample.syl
+Pure Sylheti Syntax with Custom Vocabulary
+Demonstration of multi-line comment
+==========================================
+bekama
 
-// 1. Include Directive (haraiarania)
+bekar 1. Include Directive (haraiarania)
 haraiarania "gonit.syl" hesh
 
-// 2. Struct Definition (dhach / bekasuru ... bekahesh)
+bekar 2. Struct Definition (dhach / bekasuru ... bekahesh)
 dhach Manush bekasuru
     mat naam hesh
     nombor boyosh hesh
 bekahesh hesh
 
-// 3. Class Definition (sreni / bekasuru ... bekahesh)
+bekar 3. Class Definition (sreni / bekasuru ... bekahesh)
 sreni Gari bekasuru
     mat brand hesh
     nombor speed hesh
@@ -202,16 +219,16 @@ sreni Gari bekasuru
     bekahesh
 bekahesh hesh
 
-// 4. Main Program (shuru ... shesh)
+bekar 4. Main Program (shuru ... shesh)
 shuru bekasuru
 
-    // Input and Output (foroba / lekoreba)
+    bekar Input and Output (foroba / lekoreba)
     nombor input_num hesh
     foroba gullasuru input_num gullahesh hesh
     lekoreba gullasuru "Apne input disoin:" gullahesh hesh
     lekoreba gullasuru input_num gullahesh hesh
 
-    // Variable Declarations & Assignment (harau)
+    bekar Variable Declarations & Assignment (harau)
     nombor a harau 10 hesh
     nombor b harau 5 hesh
     gutaalanombor pi harau 3.14 hesh
@@ -219,42 +236,42 @@ shuru bekasuru
     nombor thik_ase harau hasa hesh
     nombor bhul_ase harau misa hesh
 
-    // Descriptive Operators: jura lagau, kati lau, furon koro, bangi lau, baki kotokan
+    bekar Descriptive Operators: jura lagau, kati lau, furon koro, bangi lau, baki kotokan
     nombor jog harau a jura lagau b hesh
     nombor biyog harau a kati lau b hesh
     nombor goon harau a furon koro b hesh
     nombor bhaag harau a bangi lau b hesh
     nombor vagshes harau a baki kotokan b hesh
 
-    // Increment and Decrement: barau, komau
+    bekar Increment and Decrement: barau, komau
     a barau hesh
     b komau hesh
 
-    // Compound Assignment: jura lagau doure, kati lau doure
+    bekar Compound Assignment: jura lagau doure, kati lau doure
     a jura lagau doure 2 hesh
     b kati lau doure 1 hesh
 
-    // Conditional: judi / naile
-    // Comparison: fura boro, fura chuto, shoman, besoman
+    bekar Conditional: judi / naile
+    bekar Comparison: fura boro, fura chuto, shoman, besoman
     judi gullasuru a fura boro b gullahesh bekasuru
         lekoreba gullasuru "a boro b theke" gullahesh hesh
     bekahesh naile bekasuru
         lekoreba gullasuru "b boro" gullahesh hesh
     bekahesh
 
-    // Complex Condition: soman ba tura boro, duiogu oite oibo, egu oilei oibo
+    bekar Complex Condition: soman ba tura boro, duiogu oite oibo, egu oilei oibo
     judi gullasuru gullasuru a soman ba tura boro 10 gullahesh duiogu oite oibo gullasuru b besoman 0 gullahesh gullahesh bekasuru
         lekoreba gullasuru "Condition passed" gullahesh hesh
     bekahesh
 
-    // While Loop: jotobil
+    bekar While Loop: jotobil
     nombor count harau 0 hesh
     jotobil gullasuru count fura chuto 5 gullahesh bekasuru
         lekoreba gullasuru count gullahesh hesh
         count barau hesh
     bekahesh
 
-    // For Loop: cokkor maro
+    bekar For Loop: cokkor maro
     cokkor maro gullasuru nombor i harau 0 hesh i fura chuto 10 hesh i barau gullahesh bekasuru
         judi gullasuru i shoman 3 gullahesh bekasuru
             au jai hesh
@@ -264,17 +281,17 @@ shuru bekasuru
         bekahesh
     bekahesh
 
-    // Array (katar / sujasuru ... sujahesh)
+    bekar Array (katar / sujasuru ... sujahesh)
     katar nombor numbers sujasuru 5 sujahesh hesh
     numbers sujasuru 0 sujahesh harau 100 hesh
     numbers sujasuru 1 sujahesh harau 200 hesh
     lekoreba gullasuru numbers sujasuru 0 sujahesh gullahesh hesh
 
-    // Dot (pura domlou) and Comma (halka ubau)
+    bekar Dot (pura domlou) and Comma (halka ubau)
     Manush m1 hesh
     m1 pura domlou boyosh harau 25 hesh
 
-    // Return (firot)
+    bekar Return (firot)
     firot 0 hesh
 
 bekahesh
@@ -290,7 +307,7 @@ shesh
 flex lexer.l
 gcc -Wall lex.yy.c -o lexer
 ```
-Compiles with **zero errors and zero warnings**.
+Compiles cleanly with **zero errors and zero warnings**.
 
 ### 5.2 Execution Command
 ```bash
@@ -299,10 +316,7 @@ Compiles with **zero errors and zero warnings**.
 
 ### 5.3 Actual Terminal Output
 ```text
-single comment
-single comment
-single comment
-single comment
+multi comment
 single comment
 include
 string literal: "gonit.syl"
@@ -603,6 +617,7 @@ end keyword
 
 ## 6. Conclusion
 
-- Added `{SP}` macro `[ \t]+` ensuring complete multi-space and tab tolerance for multi-word phrases.
-- Properly closed `yyin` with `fclose(yyin)`.
-- Compiles with zero warnings and runs cleanly.
+- **Custom Sylheti Comments:** Implemented single-line comments with `bekar.*` and multi-line comments with `"fura"(.|\n)*"bekama"` using simple, direct one-line rules.
+- **Multi-Space Tolerance:** Defined `{SP}` macro `[ \t]+` ensuring seamless tokenization of multi-word phrases regardless of spacing or tabs.
+- **Resource Management:** Included `fclose(yyin)` to safely close open file streams.
+- **Quality Assurance:** Tested against `sample.syl` with `gcc -Wall`, resulting in zero errors, zero warnings, and clean tokenization.
