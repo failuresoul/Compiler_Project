@@ -1,0 +1,101 @@
+// ==========================================
+// SylhetScript Program: sample.syl
+// Pure Sylheti Syntax with Custom Vocabulary
+// ==========================================
+
+// 1. Include Directive (haraiarania)
+haraiarania "gonit.syl" hesh
+
+// 2. Struct Definition (dhach / bekasuru ... bekahesh)
+dhach Manush bekasuru
+    mat naam hesh
+    nombor boyosh hesh
+bekahesh hesh
+
+// 3. Class Definition (sreni / bekasuru ... bekahesh)
+sreni Gari bekasuru
+    mat brand hesh
+    nombor speed hesh
+
+    kam chalao gullasuru gullahesh bekasuru
+        lekoreba gullasuru "Gari choltese" gullahesh hesh
+    bekahesh
+bekahesh hesh
+
+// 4. Main Program (shuru ... shesh)
+shuru bekasuru
+
+    // Input and Output (foroba / lekoreba)
+    nombor input_num hesh
+    foroba gullasuru input_num gullahesh hesh
+    lekoreba gullasuru "Apne input disoin:" gullahesh hesh
+    lekoreba gullasuru input_num gullahesh hesh
+
+    // Variable Declarations & Assignment (harau)
+    nombor a harau 10 hesh
+    nombor b harau 5 hesh
+    gutaalanombor pi harau 3.14 hesh
+    mat shohor harau "Sylhet" hesh
+    nombor thik_ase harau hasa hesh
+    nombor bhul_ase harau misa hesh
+
+    // Descriptive Operators: jura lagau, kati lau, furon koro, bangi lau, baki kotokan
+    nombor jog harau a jura lagau b hesh
+    nombor biyog harau a kati lau b hesh
+    nombor goon harau a furon koro b hesh
+    nombor bhaag harau a bangi lau b hesh
+    nombor vagshes harau a baki kotokan b hesh
+
+    // Increment and Decrement: barau, komau
+    a barau hesh
+    b komau hesh
+
+    // Compound Assignment: jura lagau doure, kati lau doure
+    a jura lagau doure 2 hesh
+    b kati lau doure 1 hesh
+
+    // Conditional: judi / naile
+    // Comparison: fura boro, fura chuto, shoman, besoman
+    judi gullasuru a fura boro b gullahesh bekasuru
+        lekoreba gullasuru "a boro b theke" gullahesh hesh
+    bekahesh naile bekasuru
+        lekoreba gullasuru "b boro" gullahesh hesh
+    bekahesh
+
+    // Complex Condition: soman ba tura boro, duiogu oite oibo, egu oilei oibo
+    judi gullasuru gullasuru a soman ba tura boro 10 gullahesh duiogu oite oibo gullasuru b besoman 0 gullahesh gullahesh bekasuru
+        lekoreba gullasuru "Condition passed" gullahesh hesh
+    bekahesh
+
+    // While Loop: jotobil
+    nombor count harau 0 hesh
+    jotobil gullasuru count fura chuto 5 gullahesh bekasuru
+        lekoreba gullasuru count gullahesh hesh
+        count barau hesh
+    bekahesh
+
+    // For Loop: cokkor maro
+    cokkor maro gullasuru nombor i harau 0 hesh i fura chuto 10 hesh i barau gullahesh bekasuru
+        judi gullasuru i shoman 3 gullahesh bekasuru
+            au jai hesh
+        bekahesh
+        judi gullasuru i shoman 8 gullahesh bekasuru
+            domlou hesh
+        bekahesh
+    bekahesh
+
+    // Array (katar / sujasuru ... sujahesh)
+    katar nombor numbers sujasuru 5 sujahesh hesh
+    numbers sujasuru 0 sujahesh harau 100 hesh
+    numbers sujasuru 1 sujahesh harau 200 hesh
+    lekoreba gullasuru numbers sujasuru 0 sujahesh gullahesh hesh
+
+    // Dot (pura domlou) and Comma (halka ubau)
+    Manush m1 hesh
+    m1 pura domlou boyosh harau 25 hesh
+
+    // Return (firot)
+    firot 0 hesh
+
+bekahesh
+shesh
