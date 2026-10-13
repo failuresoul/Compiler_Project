@@ -4,14 +4,14 @@
 
 %%
 
- /* 1. Include Directive */
+ /*Include Directive */
 "haraiarania"                                  { printf("include: %s\n", yytext); }
 
- /* 2. Input and Output */
+ /*i/p and o/p */
 "foroba"                                       { printf("input keyword: %s\n", yytext); }
 "lekoreba"                                     { printf("output keyword: %s\n", yytext); }
 
- /* 3. Core Keywords */
+ /*Keywords */
 "shuru"                                        { printf("start keyword: %s\n", yytext); }
 "shesh"                                        { printf("end keyword: %s\n", yytext); }
 "nombor"                                       { printf("integer type: %s\n", yytext); }
@@ -26,23 +26,23 @@
 "hasa"                                         { printf("boolean true: %s\n", yytext); }
 "misa"                                         { printf("boolean false: %s\n", yytext); }
 
- /* 4. Switch Case */
+ /*Switch Case */
 "bodlao"                                       { printf("switch keyword: %s\n", yytext); }
 "dhaf"                                         { printf("case keyword: %s\n", yytext); }
 "shesh_mesh"                                   { printf("default keyword: %s\n", yytext); }
 
- /* 5. Loops */
+ /*Loops */
 "jotobil"                                      { printf("while loop: %s\n", yytext); }
 "cokkor_maro"                                  { printf("for loop: %s\n", yytext); }
 "domlou"                                       { printf("break: %s\n", yytext); }
 "au_jai"                                       { printf("continue: %s\n", yytext); }
 
- /* 6. Array, Struct, Class */
+ /*Array, Struct, Class */
 "katar"                                        { printf("array keyword: %s\n", yytext); }
 "dhach"                                        { printf("struct: %s\n", yytext); }
 "sreni"                                        { printf("class: %s\n", yytext); }
 
- /* 7. Native Sylheti Punctuation */
+ /*Punctuation */
 "hesh"                                         { printf("semicolon : %s\n", yytext); }
 "bekasuru"                                     { printf("2nd bracket start : %s\n", yytext); }
 "bekahesh"                                     { printf("2nd bracket end : %s\n", yytext); }
@@ -54,7 +54,7 @@
 "pura_domlou"                                  { printf("dot : %s\n", yytext); }
 "dui_futa"|":"                                 { printf("colon : %s\n", yytext); }
 
- /* 8. Descriptive Operators */
+ /*Operators*/
 "jura_lagau"                                   { printf("operator addition: %s\n", yytext); }
 "kati_lau"                                     { printf("operator subtraction: %s\n", yytext); }
 "furon_koro"                                   { printf("operator multiplication: %s\n", yytext); }
@@ -79,19 +79,19 @@
 "egu_oilei_oibo"                               { printf("operator or: %s\n", yytext); }
 "ja_koibay_ulta"                               { printf("operator not: %s\n", yytext); }
 
- /* Literals */
+ /*Literals*/
 [0-9]+[.][0-9]+                                { printf("float literal: %s\n", yytext); }
 [0-9]+                                         { printf("integer literal: %s\n", yytext); }
 \"([^\"\\\n]|\\.)*\"                           { printf("string literal: %s\n", yytext); }
 
- /* Comments */
+ /*Comments*/
 "bekar".*                                      { printf("single comment: %s\n", yytext); }
 "fura"(.|\n)*"bekama"                          { printf("multi comment: %s\n", yytext); }
 
- /* Identifiers */
+ /*Identifiers*/
 [a-zA-Z_][a-zA-Z0-9_]*                         { printf("identifier: %s\n", yytext); }
 
- /* Whitespace and ignore */
+ /*Whitespace and ignore*/
 [ \t\r\n]+                                     ;
 .                                              { printf("unrecognized symbol: %s\n", yytext); }
 
